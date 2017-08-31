@@ -53,6 +53,7 @@ class ClassMetadata extends MergeableClassMetadata
     public $handlerCallbacks = array();
 
     public $discriminatorDisabled = false;
+    public $discriminatorStrictDeserialize = true;
     public $discriminatorBaseClass;
     public $discriminatorFieldName;
     public $discriminatorValue;
@@ -63,7 +64,7 @@ class ClassMetadata extends MergeableClassMetadata
     public $xmlDiscriminatorCData = true;
     public $xmlDiscriminatorNamespace;
 
-    public function setDiscriminator($fieldName, array $map, array $groups = array())
+    public function setDiscriminator($fieldName, array $map, array $groups = array(), $strictdeserialize = true)
     {
         if (empty($fieldName)) {
             throw new \InvalidArgumentException('The $fieldName cannot be empty.');
@@ -77,6 +78,7 @@ class ClassMetadata extends MergeableClassMetadata
         $this->discriminatorFieldName = $fieldName;
         $this->discriminatorMap = $map;
         $this->discriminatorGroups = $groups;
+        $this->discriminatorStrictDeserialize = $strictdeserialize;
     }
 
     /**
@@ -177,6 +179,10 @@ class ClassMetadata extends MergeableClassMetadata
             $this->discriminatorDisabled = $object->discriminatorDisabled;
         }
 
+        if ($object->discriminatorStrictDeserialize !== null) {
+            $this->discriminatorStrictDeserialize = $object->discriminatorStrictDeserialize;
+        }
+
         if ($object->discriminatorMap) {
             $this->discriminatorFieldName = $object->discriminatorFieldName;
             $this->discriminatorMap = $object->discriminatorMap;
@@ -254,6 +260,7 @@ class ClassMetadata extends MergeableClassMetadata
             $this->customOrder,
             $this->handlerCallbacks,
             $this->discriminatorDisabled,
+            $this->discriminatorStrictDeserialize,
             $this->discriminatorBaseClass,
             $this->discriminatorFieldName,
             $this->discriminatorValue,
@@ -283,6 +290,7 @@ class ClassMetadata extends MergeableClassMetadata
             $this->customOrder,
             $this->handlerCallbacks,
             $this->discriminatorDisabled,
+            $this->discriminatorStrictDeserialize,
             $this->discriminatorBaseClass,
             $this->discriminatorFieldName,
             $this->discriminatorValue,
