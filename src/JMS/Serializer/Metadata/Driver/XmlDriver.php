@@ -86,11 +86,16 @@ class XmlDriver extends AbstractFileDriver
             $metadata->discriminatorDisabled = true;
         } elseif (!empty($discriminatorFieldName) || !empty($discriminatorMap)) {
 
+            $strict_deserialize = true;
+            if ('false' === (string) $elem->attributes()->{'discriminator-strict-deserialize'}) {
+                $strict_deserialize = false;
+            }
+
             $discriminatorGroups = array();
             foreach ($elem->xpath('./discriminator-groups/group') as $entry) {
                 $discriminatorGroups[] = (string)$entry;
             }
-            $metadata->setDiscriminator($discriminatorFieldName, $discriminatorMap, $discriminatorGroups);
+            $metadata->setDiscriminator($discriminatorFieldName, $discriminatorMap, $discriminatorGroups, $strict_deserialize);
         }
 
         foreach ($elem->xpath('./xml-namespace') as $xmlNamespace) {
